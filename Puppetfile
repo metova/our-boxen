@@ -59,7 +59,6 @@ github "xquartz",     "1.1.1"
 github "mysql",       "1.2.0"
 github "postgresql",  "3.0.0"
 github "sysctl",      "1.0.1"
-github "imagemagick", "1.2.0"
 github "redis",       "3.0.2"
 github "tmux",        "1.0.2"
 github "vagrant",     "3.0.7"
@@ -74,6 +73,8 @@ github "eclipse",     "2.3.0"
 github "wget",        "1.0.1"
 github "cocoapods",   "1.0.0", :repo => "jjtorroglosa/puppet-cocoapods"
 github "ohmyzsh",     "1.0.0", :repo => "samjsharpe/puppet-ohmyzsh"
+github "zsh",         "1.0.0"
+github "pkgconfig",   "1.0.0"
 
 # Optional/custom modules. There are tons available at
 # https://github.com/boxen.

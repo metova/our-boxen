@@ -12,6 +12,9 @@ class projects::metova_dev_setup {
   sublime_text_3::package { 'Emmet':
     source => 'sergeche/emmet-sublime'
   }
+  sublime_text_3::package { 'ApplySyntax':
+    source => 'facelessuser/ApplySyntax'
+  }
 
   file { "/workspace":
     ensure => "directory",
@@ -28,11 +31,12 @@ class projects::metova_dev_setup {
   class ruby_tools {
     include postgresql
     include mysql
-    include imagemagick
+    include pkgconfig
     include phantomjs
     include redis
     include virtualbox
     include vagrant
+
     package { "bcrypt":
       ensure => present,
     }
@@ -40,6 +44,9 @@ class projects::metova_dev_setup {
       ensure => present,
     }
     package { "rabbitmq":
+      ensure => present,
+    }
+    package { "imagemagick":
       ensure => present,
     }
   }
