@@ -1,5 +1,7 @@
 # Our Boxen
 
+This was forked from [Github's our-boxen](https://github.com/boxen/our-boxen/blob/master/docs/faq.md) Look at if for more information.
+
 This is a template Boxen project designed for your organization to fork and
 modify appropriately.
 The Boxen rubygem and the Boxen puppet modules are only a framework for getting
@@ -7,6 +9,14 @@ things done.
 This repository template is just a basic example of _how_ to do things with them.
 
 ## Getting Started
+
+### Please read before getting started
+
+Be sure to remove the following before getting started:
+
+* RVM. See RVM docs for removing it.
+* Homebrew. Boxen using it's own version. See [here](https://github.com/Homebrew/homebrew/wiki/FAQ#how-do-i-uninstall-homebrew) *be sure to use `brew list` to see what packages you have so you can write a puppet script to re-download them.* See Guide for setting up your personal manifest reinstalling homebrew packages with boxen at the bottom of this readme ßafter installing boxen for reinstalling homebrew packages
+
 
 To give you a brief overview, we're going to:
 
@@ -43,6 +53,12 @@ If you are using [`b26abd0` of boxen-web](https://github.com/boxen/boxen-web/com
 or newer, it will be automatically installed as part of Boxen.
 Otherwise, follow instructions below.
 
+*Solutions*
+
+Add this line to your `.bash_profile`
+
+`export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future`
+
 #### OS X < 10.9
 
 1. Install Xcode from the Mac App Store.
@@ -66,11 +82,8 @@ your boxen:
 ```
 sudo mkdir -p /opt/boxen
 sudo chown ${USER}:staff /opt/boxen
-git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+git clone git@github.com:metova/our-boxen.git /opt/boxen/repo
 cd /opt/boxen/repo
-git remote rm origin
-git remote add origin <the location of my new git repository>
-git push -u origin master
 ```
 
 Now that your boxen is bootstrapped, you can run the following to
@@ -127,6 +140,10 @@ Boxen will create a shim for you that will work correctly.
 If you do have a `~/.bashrc` or `~/.zshrc`, your shell will not use
 `~/.profile` so you'll need to add a line like so at _the end of your config_:
 
+## Post install directions
+
+*Add this to your `.bash_profile` if it doesn't exist already.*
+
 ``` sh
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
 ```
@@ -134,6 +151,10 @@ If you do have a `~/.bashrc` or `~/.zshrc`, your shell will not use
 Once your shell is ready, open a new tab/window in your Terminal
 and you should be able to successfully run `boxen --env`.
 If that runs cleanly, you're in good shape.
+
+After this create your personal manifest
+
+
 
 ## What You Get
 
@@ -145,9 +166,6 @@ This template project provides the following by default:
 * dnsmasq w/ .dev resolver for localhost
 * rbenv
 * Full Disk Encryption requirement
-* Node.js 0.6
-* Node.js 0.8
-* Node.js 0.10
 * Ruby 1.9.3
 * Ruby 2.0.0
 * Ruby 2.1.0
@@ -155,6 +173,15 @@ This template project provides the following by default:
 * ack
 * Findutils
 * GNU tar
+* Imagemagick
+* Chrome
+* Hipchat
+* Eclipse
+* Sublime Text 3
+* iTerm2
+* Sourcetree
+
+And Much More. See [metova_dev_setup.pp](https://github.com/metova/our-boxen/blob/master/modules/projects/manifests/metova_dev_setup.pp) And [site.pp](https://github.com/metova/our-boxen/blob/master/manifests/site.pp) for the rest of the list.
 
 ## Customizing
 
@@ -167,28 +194,9 @@ in dependencies automatically whenever `boxen` is run.
 ### Including boxen modules from github (boxen/puppet-<name>)
 
 You must add the github information for your added Puppet module into your Puppetfile at the root of your
-boxen repo (ex. /path/to/your-boxen/Puppetfile):
-
-    # Core modules for a basic development environment. You can replace
-    # some/most of these if you want, but it's not recommended.
-
-    github "repository", "2.0.2"
-    github "dnsmasq",    "1.0.0"
-    github "gcc",        "1.0.0"
-    github "git",        "1.2.2"
-    github "homebrew",   "1.1.2"
-    github "hub",        "1.0.0"
-    github "inifile",    "0.9.0", :repo => "cprice404/puppetlabs-inifile"
-    github "nginx",      "1.4.0"
-    github "nodejs",     "2.2.0"
-    github "ruby",       "4.1.0"
-    github "stdlib",     "4.0.2", :repo => "puppetlabs/puppetlabs-stdlib"
-    github "sudo",       "1.0.0"
-
-    # Optional/custom modules. There are tons available at
-    # https://github.com/boxen.
-
-    github "java",     "1.1.0"
+boxen repo [Puppetfile](https://github.com/metova/our-boxen/blob/master/Puppetfile):
+*Be sure to check out what we have currently in the Puppetfile before adding something.*
+*Also check out the [metova_dev_setup.pp](https://github.com/metova/our-boxen/blob/master/modules/projects/manifests/metova_dev_setup.pp)
 
 In the above snippet of a customized Puppetfile, the bottom line
 includes the Java module from Github using the tag "1.1.0" from the github repository
@@ -327,3 +335,22 @@ you will need to set the `BOXEN_GITHUB_ENTERPRISE_URL` and
 See [FAQ](https://github.com/boxen/our-boxen/blob/master/docs/faq.md).
 
 Use Issues or #boxen on irc.freenode.net.
+
+## Guide for setting up your personal manifest reinstalling homebrew packages with boxen
+
+First make your people manifest. It will go in the `modules/people/manifests` directory
+e.g. `modules/people/manifests/meatherly.pp` 
+
+copy this into the file
+```puppet
+class people::YOUR_LOGIN_NAME {
+  include projects::metova_dev_setup
+  # example on install homebrew packages
+  #package { "imagemagick":
+  #  ensure => present,
+  #}
+}
+```
+
+Use the package resource example above to install homebrew packages that you might have lost when uninstalling homebrew.
+
